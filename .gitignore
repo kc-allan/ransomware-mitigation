@@ -1,0 +1,13 @@
+venv
+test*
+*.pyc
+*.pyo
+__pycache__
+*.egg-info
+*.egg
+*.dist-info
+*.log
+*.swp
+*.swo
+*.swn
+ransom_1.*

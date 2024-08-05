@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{title}}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css">
+</head>
+
+<body class="h-screen">
+	{% with messages = get_flashed_messages(with_categories=True) %}
+	{% if messages %}
+	{% for category, message in messages %}
+	<div class="relative bg-{{category}}-400 text-white font-bold p-2 text-center flex items-center justify-center">
+		{{message}}
+		<span id="close" class="text-lg absolute right-5 cursor-pointer">&times;</span>
+	</div>
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
+	<header class="bg-blue-500 p-4 shadow-md py-6">
+		<div class="container mx-auto flex justify-between items-center">
+			<a href="/accounts/dashboard" class="text-white font-bold text-xl">
+				Health Haven
+			</a>
+			<nav>
+				<ul class="flex space-x-4 mr-8">
+					{% if current_user.is_authenticated %}
+					<li><a href="{{url_for('accounts.dashboard')}}" class="text-white hover:text-gray-300">Dashboard</a>
+					</li>
+					{% else %}
+					<li><a href="/auth/login" class="text-white hover:text-gray-300">Log In</a></li>
+					<li><a href="/auth/register" class="text-white hover:text-gray-300">Register</a></li>
+					{% endif %}
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<main class="h-full">{% block content %}{% endblock content %}</main>
+</body>
+<script>
+	const cls = document.querySelector('#close')
+	if (cls !== null) {
+		cls.addEventListener('click', function () {
+			this.parentElement.remove()
+		});
+	}
+</script>
+
+</html>

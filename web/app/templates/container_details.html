@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-bold mb-2">Container Files</h2>
+    <ul class="list-disc pl-5">
+        {% if files %}
+            {% for file in files %}
+                <li>{{ file.name }}  => {{file.safe}}</li>
+            {% endfor %}
+        {% else %}
+            <li>No files found in the container.</li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="bg-white p-4 rounded shadow mt-4">
+    <h2 class="text-xl font-bold mb-2">Container Logs</h2>
+    <pre class="whitespace-pre-wrap bg-gray-100 p-4 rounded">
+        {{ logs|safe }}
+    </pre>
+</div>
+
+<div class="bg-white p-4 rounded shadow mt-4">
+    <h2 class="text-xl font-bold mb-2">Upload File to Container</h2>
+    <form action="{{ url_for('accounts.upload_file_to_container') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="container_id" value="{{ container_id }}">
+        <input type="file" name="file" class="border p-2 w-full mb-2" required>
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Upload</button>
+    </form>
+</div>
+{% endblock content %}

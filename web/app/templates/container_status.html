@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Status</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const eventSource = new EventSource('/stream');
+			console.log(eventSource);
+            const statusElement = document.getElementById('status');
+            const logElement = document.getElementById('log');
+			eventSource.onmessage = function(event) {
+				console.log(event);
+				statusText = document.createElement('div');
+				statusText.textContent = event.data;
+                statusElement.appendChild(statusText);
+			}
+            eventSource.addEventListener('status', function (event) {
+				statusText = document.createElement('div');
+				statusText.textContent = event.data;
+                statusElement.appendChild(statusText);
+            });
+            eventSource.addEventListener('log', function (event) {
+                const logMessage = document.createElement('div');
+				console.log(event.data);
+                logMessage.textContent = event.data;
+                logElement.appendChild(logMessage);
+            });
+
+            eventSource.onerror = function () {
+                console.error('EventSource failed.');
+                eventSource.close();
+            };
+        });
+    </script>
+</head>
+<body>
+    <h1>Container Status for {{ container_name }}</h1>
+    <div id="status">Waiting for status...</div>
+    <div id="log">Log messages will appear here...</div>
+</body>
+</html>

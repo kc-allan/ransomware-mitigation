@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Create Container</h2>
+        <form action="{{ url_for('accounts.create_container') }}" method="POST">
+            <input type="text" name="container_name" class="border p-2 w-full mb-2" placeholder="Container Name" required>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Create</button>
+        </form>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Available Container Images</h2>
+        <ul class="list-disc pl-5">
+            {% for image in current_user.container_images %}
+                <li class="flex justify-between items-center m-4">
+                    <div>{{ image.image_name }} (ID: {{ image.image_id }}, Tag: {{ image.image_tag }})</div>
+                    <a href="{{ url_for('accounts.container_details', container_id=image.id) }}" class="bg-blue-500 text-white p-1 rounded ml-2">Details</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="bg-white p-4 rounded shadow mt-4">
+    <h2 class="text-xl font-bold mb-2">Container Status Dashboard</h2>
+    <div id="container-status-dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for container in current_user.container_images %}
+            <div class="bg-gray-100 p-4 rounded shadow">
+                <h3 class="text-lg font-semibold">{{ container.image_name }}</h3>
+                <canvas id="chart-{{ container.id }}"></canvas>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for container in current_user.container_images %}
+            fetch('{{ url_for('accounts.container_stats', container_id=container.id) }}')
+                .then(response => response.json())
+                .then(resp => {
+                    console.log(resp);
+                    var ctx = document.getElementById('chart-{{ container.id }}').getContext('2d');
+                    var chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['CPU Usage', 'Memory Usage', 'Disk Usage', 'Network Usage'],
+                            datasets: [{
+                                label: 'Container Stats',
+                                data: [resp.cpu_usage, resp.memory_usage, resp.disk_usage, resp.network_usage], // Replace with actual data
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true
+                        }
+                    });
+                });
+        {% endfor %}
+    });
+</script>
+{% endblock %}

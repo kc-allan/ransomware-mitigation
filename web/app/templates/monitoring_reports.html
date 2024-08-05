@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-bold mb-2">Monitoring Reports</h2>
+    <ul>
+        {% for report in reports %}
+            <li class="mb-2">
+                <div class="bg-gray-100 p-2 rounded">
+                    <p>{{ report.description }}</p>
+                    <p>Status: {{ report.status }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
