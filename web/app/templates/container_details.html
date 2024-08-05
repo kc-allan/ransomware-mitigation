@@ -6,7 +6,7 @@
     <ul class="list-disc pl-5">
         {% if files %}
             {% for file in files %}
-                <li>{{ file.name }}  => {{file.safe}}</li>
+                <li>{{ file.name }}</li>
             {% endfor %}
         {% else %}
             <li>No files found in the container.</li>
