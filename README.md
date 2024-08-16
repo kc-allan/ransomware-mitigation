@@ -1,7 +1,3 @@
-Here's a README for your ransomware mitigation system:
-
----
-
 # Ransomware Mitigation System
 
 Welcome to the **Ransomware Mitigation System** repository! This project is designed to protect healthcare data centers from ransomware attacks by utilizing containerization and immutable infrastructure. By isolating applications into secure containers and ensuring that the infrastructure remains immutable, this system effectively reduces the risk of data compromise.
